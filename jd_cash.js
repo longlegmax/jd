@@ -466,7 +466,7 @@ function getAuthorShareCode(url = "") {
       try {
         if (err) {
         } else {
-          $.authorCode = JSON.parse(data)
+          $.authorCode = []
         }
       } catch (e) {
         $.logErr(e, resp)
@@ -485,7 +485,7 @@ function getAuthorShareCode2(url = "") {
       try {
         if (err) {
         } else {
-          $.authorCode2 = JSON.parse(data)
+          $.authorCode2 = []
           if ($.authorCode2 && $.authorCode2.length) {
             $.authorCode.push(...$.authorCode2);
           }
