@@ -155,9 +155,9 @@ function getShareCode(token) {
       try {
         //data = $.toObj(data)
         data = []
-        shareCodes.push({
-          'tid': token,
-          'uid': data.body.openid
+        //shareCodes.push({
+        //  'tid': token,
+        //  'uid': data.body.openid
         })
       } catch (e) {
         $.logErr(e, resp)
