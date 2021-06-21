@@ -152,9 +152,9 @@ function getShareCode(token) {
         'Accept-Language': 'zh-cn',
       }
     }, (err, resp, data) => {
-      try {
+      //try {
         //data = $.toObj(data)
-        data = []
+        //data = []
         //shareCodes.push({
         //  'tid': token,
         //  'uid': data.body.openid
