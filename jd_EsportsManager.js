@@ -142,7 +142,7 @@ async function main() {
 function getShareCode(token) {
   return new Promise(resolve => {
     $.get({
-      url: 'https://xinruidddj-isv.isvjcloud.com/api/uc/user',
+      url: '',
       headers: {
         'Host': 'xinruidddj-isv.isvjcloud.com',
         'Content-Type': 'application/x-www-form-urlencoded',
