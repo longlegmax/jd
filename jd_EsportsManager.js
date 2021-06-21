@@ -153,7 +153,8 @@ function getShareCode(token) {
       }
     }, (err, resp, data) => {
       try {
-        data = $.toObj(data)
+        //data = $.toObj(data)
+        data = []
         shareCodes.push({
           'tid': token,
           'uid': data.body.openid
