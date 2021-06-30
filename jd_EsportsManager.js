@@ -46,9 +46,6 @@ let tasks = [], shareCodes = [], first = true;
       $.shareCode = await makeShareCode();
       await TotalBean();
       console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
-
-      console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.shareCode}\n`);
-
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         if ($.isNode()) {
@@ -63,7 +60,10 @@ let tasks = [], shareCodes = [], first = true;
       await getIsvToken2();
       await getToken();
 
-      await get_produce_coins();
+      let r = await get_produce_coins();
+      if (r !== 200)
+        continue
+
       await $.wait(1000);
 
       await main();
@@ -73,13 +73,6 @@ let tasks = [], shareCodes = [], first = true;
     await notify.sendNotify(`${$.name}`, `${allMessage}`)
   }
 })()
-  .catch((e) => {
-    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-  })
-  .finally(() => {
-    $.done();
-  })
-
 
 async function main() {
   tasks = await detail();
@@ -92,18 +85,14 @@ async function main() {
           await do_task(task_vos.simple_record_info_vo.task_token, task_vos.task_id, task_vos.task_type)
         continue
       case 1:
-        // if ($.index === 0) {
         await getShareCode(task_vos.assist_task_detail_vo.task_token)
         await $.wait(1000)
-        // first = false
-        getAssist()
-        await $.wait(1000)
-        // } else {
-        console.log(`第${$.index}个账号${$.UserName}去助力第${Math.floor(($.index - 1) / 6) + 1}个账号。`)
-        doAssist()
-        await $.wait(1000)
-        // }
 
+        await getAssist()
+        await $.wait(1000)
+
+        console.log(`第${$.index}个账号${$.UserName}去助力第${Math.floor(($.index - 1) / 6) + 1}个账号。`)
+        await doAssist()
         continue
       case 2:
         product_info_vos = task_vos['browse_shop_vo']
@@ -132,8 +121,6 @@ async function main() {
         console.log(`开始任务：${task_vos.task_name}`)
         let res = await do_task(t.task_token, taskId, taskType)
         await $.wait(1000)
-        // if (res !== 200)
-        //   continue
       }
     }
   }
@@ -169,7 +156,6 @@ function getShareCode(token) {
 }
 
 function doAssist() {
-  console.log($.index, 'shareCodes[' + Math.floor(($.index - 1) / 6) + ']')
   return new Promise(resolve => {
     $.post({
       url: 'https://xinruidddj-isv.isvjcloud.com/api/task/do_assist_task',
@@ -181,7 +167,7 @@ function doAssist() {
         'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;10.0.2;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         'Accept-Language': 'zh-cn',
       },
-      body: `token=${shareCodes[Math.floor(($.index - 1) / 6)]}&inviter=${Math.floor(($.index - 1) / 6)}`
+      body: `token=${shareCodes[Math.floor(($.index - 1) / 6)].tid}&inviter=${Math.floor(($.index - 1) / 6).uid}`
     }, (err, resp, data) => {
       try {
         data = $.toObj(data)
@@ -212,6 +198,7 @@ function getAssist() {
     }, (err, resp, data) => {
       try {
         data = $.toObj(data)
+        console.log(`今日共收到${data.body.length}个助力`)
       } catch (e) {
         $.logErr(e, resp)
       } finally {
@@ -441,12 +428,13 @@ function get_produce_coins() {
             console.log(`收币成功：获得 ${coins}`)
           } else {
             console.log('收币失败！')
+            resolve(500)
           }
         }
       } catch (e) {
         $.logErr(e, resp)
       } finally {
-        resolve()
+        resolve(200)
       }
     })
   })
@@ -624,7 +612,11 @@ function Env(t, e) {
         i = i ? i.replace(/\n/g, "").trim() : i;
         let r = this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout");
         r = r ? 1 * r : 20, r = e && e.timeout ? e.timeout : r;
-        const [o, h] = i.split("@"), n = {url: `http://${h}/v1/scripting/evaluate`, body: {script_text: t, mock_type: "cron", timeout: r}, headers: {"X-Key": o, Accept: "*/*"}};
+        const [o, h] = i.split("@"), n = {
+          url: `http://${h}/v1/scripting/evaluate`,
+          body: {script_text: t, mock_type: "cron", timeout: r},
+          headers: {"X-Key": o, Accept: "*/*"}
+        };
         this.post(n, (t, e, i) => s(i))
       }).catch(t => this.logErr(t))
     }
@@ -633,7 +625,8 @@ function Env(t, e) {
       if (!this.isNode()) return {};
       {
         this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path");
-        const t = this.path.resolve(this.dataFile), e = this.path.resolve(process.cwd(), this.dataFile), s = this.fs.existsSync(t), i = !s && this.fs.existsSync(e);
+        const t = this.path.resolve(this.dataFile), e = this.path.resolve(process.cwd(), this.dataFile),
+          s = this.fs.existsSync(t), i = !s && this.fs.existsSync(e);
         if (!s && !i) return {};
         {
           const i = s ? t : e;
@@ -649,7 +642,8 @@ function Env(t, e) {
     writedata() {
       if (this.isNode()) {
         this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path");
-        const t = this.path.resolve(this.dataFile), e = this.path.resolve(process.cwd(), this.dataFile), s = this.fs.existsSync(t), i = !s && this.fs.existsSync(e), r = JSON.stringify(this.data);
+        const t = this.path.resolve(this.dataFile), e = this.path.resolve(process.cwd(), this.dataFile),
+          s = this.fs.existsSync(t), i = !s && this.fs.existsSync(e), r = JSON.stringify(this.data);
         s ? this.fs.writeFileSync(t, r) : i ? this.fs.writeFileSync(e, r) : this.fs.writeFileSync(t, r)
       }
     }
@@ -753,7 +747,15 @@ function Env(t, e) {
 
     time(t, e = null) {
       const s = e ? new Date(e) : new Date;
-      let i = {"M+": s.getMonth() + 1, "d+": s.getDate(), "H+": s.getHours(), "m+": s.getMinutes(), "s+": s.getSeconds(), "q+": Math.floor((s.getMonth() + 3) / 3), S: s.getMilliseconds()};
+      let i = {
+        "M+": s.getMonth() + 1,
+        "d+": s.getDate(),
+        "H+": s.getHours(),
+        "m+": s.getMinutes(),
+        "s+": s.getSeconds(),
+        "q+": Math.floor((s.getMonth() + 3) / 3),
+        S: s.getMilliseconds()
+      };
       /(y+)/.test(t) && (t = t.replace(RegExp.$1, (s.getFullYear() + "").substr(4 - RegExp.$1.length)));
       for (let e in i) new RegExp("(" + e + ")").test(t) && (t = t.replace(RegExp.$1, 1 == RegExp.$1.length ? i[e] : ("00" + i[e]).substr(("" + i[e]).length)));
       return t
