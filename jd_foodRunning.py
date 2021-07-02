@@ -17,10 +17,11 @@ class FoodRunning:
             headers={
                 'Host': 'api.m.jd.com',
                 'accept': '*/*',
-                'user-agent': 'jdapp;android;10.0.2;8.0.0;network/wifi;Mozilla/5.0 (Linux; Android 8.0.0; HTC U-3w Build/OPR6.170623.013; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/6.2 TBS/044942 Mobile Safari/537.36',
+                'user-agent': USER_AGENTS,
                 'content-type': 'application/x-www-form-urlencoded',
                 'Cookie': self.cooke
             }, data='body=%7B%22id%22%3A%22%22%2C%22url%22%3A%22https%3A//xinruidddj-isv.isvjcloud.com%22%7D').json()
+        print(res)
         return res['token']
 
     def api(self, fn):
@@ -30,7 +31,7 @@ class FoodRunning:
             'Connection': 'keep-alive',
             'X-Requested-With': 'XMLHttpRequest',
             'Host': 'jinggengjcq-isv.isvjcloud.com',
-            'User-Agent': 'jdapp;android;10.0.2;8.0.0;network/wifi;Mozilla/5.0 (Linux; Android 8.0.0; HTC U-3w Build/OPR6.170623.013; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/6.2 TBS/044942 Mobile Safari/537.36',
+            'User-Agent': USER_AGENTS,
             'Content-Type': 'application/json; charset=UTF-8',
             'Accept': 'application/json',
             'Origin': 'https://jinggengjcq-isv.isvjcloud.com',
@@ -57,7 +58,7 @@ class FoodRunning:
         if body is None:
             body = {}
         headers = {
-            'User-Agent': 'jdapp;android;10.0.2;8.0.0;network/wifi;Mozilla/5.0 (Linux; Android 8.0.0; HTC U-3w Build/OPR6.170623.013; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/6.2 TBS/044942 Mobile Safari/537.36',
+            'User-Agent': USER_AGENTS,
             'Accept': 'application/json',
             'Origin': 'https://jinggengjcq-isv.isvjcloud.com',
             'Referer': 'https://jinggengjcq-isv.isvjcloud.com/paoku/index.html',
