@@ -15,8 +15,12 @@ else
   git remote set-url origin "$REPO_URL"
   git reset --hard
   echo "git pull拉取最新代码..."
+  git config --global http.proxy 'http://192.168.1.174:7890'
+  git config --global https.proxy 'http://192.168.1.174:7890'
   git -C /scripts pull --rebase
   echo "npm install 安装最新依赖"
+  npm config set proxy http://192.168.1.174:7890
+  npm config set https-proxy http://192.168.1.174:7890
   npm install --prefix /scripts
 fi
 ) || exit 0
