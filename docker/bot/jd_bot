@@ -1040,7 +1040,7 @@ def main():
     logger.info('CRONTAB_LIST_FILE=' + crontab_list_file)
 
     # 创建更新程序并参数为你Bot的TOKEN。
-    updater = Updater(bot_token, use_context=True, request_kwargs={'proxy_url': 'http://192.168.1.174:7890/'})
+    updater = Updater(bot_token, use_context=True, request_kwargs={'proxy_url':'http://192.168.1.174:7890'})
 
     # 获取调度程序来注册处理程序
     dp = updater.dispatcher
