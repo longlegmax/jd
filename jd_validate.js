@@ -502,6 +502,6 @@ class MousePosFaker {
   for (let i = 0; i < num; i++) {
     validate = await new JDJRValidator().run();
     console.log(`第${i + 1}个生成成功`)
-    fs.appendFileSync('./validate.txt', validate.validate + '\n', 'utf-8')
+    fs.appendFileSync('/scripts/validate.txt', validate.validate + '\n', 'utf-8')
   }
 })()
