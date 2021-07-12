@@ -127,7 +127,8 @@
 5 0 * * * node /scripts/jd_jin_tie.js >> /scripts/logs/jd_jin_tie.log 2>&1
 #京喜牧场
 15 0,12,22 * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
-2 */1 * * * ts-node /scripts/jd_jxmc.ts >> /scripts/logs/jd_jxmcts.log 2>&1
+#2 */1 * * * ts-node /scripts/jd_jxmc.ts >> /scripts/logs/jd_jxmcts.log 2>&1
+*/2 * * * * ts-node /scripts/jd_jxmc.ts >> /scripts/logs/jd_jxmcts.log 2>&1
 
 # 电竞经理
 0 0-23/2 * * * node /scripts/jd_EsportsManager.js >> /scripts/logs/jd_EsportsManager.log 2>&1
