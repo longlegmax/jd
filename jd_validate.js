@@ -4,7 +4,6 @@
  * cron 58 7,15,23 * * *
  */
 
-
 const http = require('http');
 const stream = require('stream');
 const zlib = require('zlib');
@@ -497,7 +496,7 @@ class MousePosFaker {
 }
 
 !(async () => {
-  fs.writeFileSync('./validate.txt', '', 'utf-8')
+  fs.writeFileSync('/scripts/validate.txt', '', 'utf-8')
   let validate = '';
   let num = process.env.validate_num ? process.env.validate_num : 5;
   for (let i = 0; i < num; i++) {
