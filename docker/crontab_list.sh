@@ -14,7 +14,7 @@
 
 #test
 59 23 * * * node /scripts/jd_validate.js >> /scripts/logs/jd_validate.log 2>&1
-0 0 * * * ts-node /scripts/jd_reward.ts >> /scripts/logs/jd_reward.log 2>&1
+0 0 * * * node /scripts/jd_reward.js >> /scripts/logs/jd_reward.log 2>&1
 
 
 
