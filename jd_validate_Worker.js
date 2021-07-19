@@ -447,7 +447,7 @@ Date.prototype.Format = function (fmt) {
 
 if (isMainThread) {
   console.log("🔔生成validate,开始！")
-  fs.writeFileSync('validate.txt', '', 'utf-8')
+  fs.writeFileSync('/scripts/validate.txt', '', 'utf-8')
   for (let i = 0; i < validate_num; i++) {
     new Worker(__filename, {
       workerData: {
@@ -458,7 +458,7 @@ if (isMainThread) {
   }
 } else {
   new JDJRValidator().run(workerData.tag).then(r => {
-    fs.appendFileSync('validate.txt', r.validate + '\n', 'utf-8')
+    fs.appendFileSync('/scripts/validate.txt', r.validate + '\n', 'utf-8')
     console.log(`Thread-${workerData.tag} time: `, workerData.start, new Date().Format("HH:mm:ss"))
   })
 }
