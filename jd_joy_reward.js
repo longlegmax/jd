@@ -53,7 +53,7 @@ var target = process.env.JD_JOY_REWARD_NAME ? parseInt(process.env.JD_JOY_REWARD
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                validate_arr = fs.readFileSync('./validate.txt', 'utf-8');
+                validate_arr = fs.readFileSync('/scripts/validate.txt', 'utf-8');
                 if (validate_arr.indexOf('\n')) {
                     validate_arr = validate_arr.split('\n');
                     validate_arr.pop();
